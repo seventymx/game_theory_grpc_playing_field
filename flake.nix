@@ -35,6 +35,9 @@
         baseDevShell = base_flake.outputs.devShell.${system};
 
         buildDependencies = baseDevShell.buildInputs ++ [ unstable.dotnet-sdk_8 ];
+
+        pname = "playing-field-service";
+        version = "0.1.0";
       in
       {
         devShell = unstable.mkShell {
@@ -43,8 +46,8 @@
         };
 
         packages.default = unstable.stdenv.mkDerivation {
-          pname = "playing-field-service";
-          version = "0.1.0";
+          pname = pname;
+          version = version;
 
           src = ./.;
 
@@ -53,6 +56,11 @@
           buildPhase = ''
             export PROTOBUF_PATH=${base_flake.inputs.protos}
             dotnet publish -c Release -o $out
+          '';
+
+          postBuild = ''
+            tar -czvf ${pname}-${version}.tar.gz -C $out .
+            mv ${pname}-${version}.tar.gz $out
           '';
 
           meta = with nixpkgs.lib; {
