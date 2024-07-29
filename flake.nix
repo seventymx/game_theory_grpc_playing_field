@@ -53,9 +53,13 @@
 
           buildInputs = buildDependencies;
 
-          buildPhase = ''
+          preBuild = ''
             export PROTOBUF_PATH=${base_flake.inputs.protos}
-            dotnet publish -c Release -o $out
+            dotnet restore
+          '';
+
+          buildPhase = ''
+            dotnet publish -c Release -o $out -v n
           '';
 
           postBuild = ''
