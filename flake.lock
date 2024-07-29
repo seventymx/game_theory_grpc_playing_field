@@ -7,11 +7,11 @@
         "protos": "protos"
       },
       "locked": {
-        "lastModified": 1722026482,
-        "narHash": "sha256-0/DsA1nSMlumjbRdHl7Dc+lGQcXTE4z8dwvWarJoVIY=",
+        "lastModified": 1722262089,
+        "narHash": "sha256-yAv+dqxNIrOA83YGAxERgf1CMtvmyl9aNPfTPrAPEU8=",
         "owner": "seventymx",
         "repo": "game_theory_grpc_base_flake",
-        "rev": "7655c2087ea1c2cecda15485bc507946a34a7a2a",
+        "rev": "e239818181c9ac500ed9fdf07b9442b9f16a6794",
         "type": "github"
       },
       "original": {
