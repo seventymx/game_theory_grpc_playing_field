@@ -37,6 +37,7 @@
         buildDependencies = baseDevShell.buildInputs ++ [ unstable.dotnet-sdk_8 ];
 
         pname = "playing-field-service";
+        # TODO: Move the version to base_flake/flake.nix
         version = "0.1.0";
       in
       {
@@ -53,17 +54,17 @@
 
           buildInputs = buildDependencies;
 
-          preBuild = ''
-            export PROTOBUF_PATH=${base_flake.inputs.protos}
-            dotnet restore
-          '';
-
           buildPhase = ''
-            dotnet publish -c Release -o $out -v n
-          '';
+            # Configure the protobuf path for dotnet to find the protos
+            export PROTOBUF_PATH=${base_flake.inputs.protos}
 
-          postBuild = ''
-            tar -czvf ${pname}-${version}.tar.gz -C $out .
+            # Build the project
+            dotnet publish -c Release -o ./publish
+
+            # Create a tarball of the publish directory
+            tar -czvf ${pname}-${version}.tar.gz -C ./publish .
+
+            # Set tarball as output
             mv ${pname}-${version}.tar.gz $out
           '';
 
