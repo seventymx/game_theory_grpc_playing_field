@@ -32,13 +32,12 @@
       let
         unstable = import nixpkgs { inherit system; };
 
-        baseDevShell = base_flake.outputs.devShell.${system};
+        pname = "playing_field-service";
+        version = "${base_flake.majorMinorVersion.${system}}.0";
+
+        baseDevShell = base_flake.devShell.${system};
 
         buildDependencies = baseDevShell.buildInputs ++ [ unstable.dotnet-sdk_8 ];
-
-        pname = "playing-field-service";
-        # TODO: Move the version to base_flake/flake.nix
-        version = "0.1.0";
       in
       {
         devShell = unstable.mkShell {
@@ -56,7 +55,7 @@
 
           buildPhase = ''
             # Configure the protobuf path for dotnet to find the protos
-            export PROTOBUF_PATH=${base_flake.inputs.protos}
+            export PROTOBUF_PATH=${base_flake.protos.${system}}
 
             # Build the project
             dotnet publish -c Release -o ./publish
