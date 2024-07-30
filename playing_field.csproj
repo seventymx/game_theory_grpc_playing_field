@@ -10,9 +10,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Author>Steffen70</Author>
-    <Copyright>$([System.DateTime]::Now.Year) $(Author)</Copyright>
-    <Version>0.1.0</Version>
+    <Author>$(PLAYING_FIELD_AUTHOR)</Author>
+    <Copyright>$([System.DateTime]::Now.Year) $(PLAYING_FIELD_COPYRIGHT)</Copyright>
+    <Version>$(PLAYING_FIELD_VERSION)</Version>
   </PropertyGroup>
 
   <Target Name="ForceClean" AfterTargets="Clean">

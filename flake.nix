@@ -38,11 +38,17 @@
         baseDevShell = base_flake.devShell.${system};
 
         buildDependencies = baseDevShell.buildInputs ++ [ unstable.dotnet-sdk_8 ];
+
+        defineEnv = ''
+          export PLAYING_FIELD_VERSION=${version}
+          export PLAYING_FIELD_AUTHOR="Steffen70"
+          export PLAYING_FIELD_COPYRIGHT="seventy.mx"
+        '';
       in
       {
         devShell = unstable.mkShell {
           buildInputs = buildDependencies;
-          shellHook = baseDevShell.shellHook;
+          shellHook = defineEnv + baseDevShell.shellHook;
         };
 
         packages.default = unstable.stdenv.mkDerivation {
@@ -54,17 +60,12 @@
           buildInputs = buildDependencies;
 
           buildPhase = ''
-            # Configure the protobuf path for dotnet to find the protos
+            # Set environment variables for compilation
             export PROTOBUF_PATH=${base_flake.protos.${system}}
+            ${defineEnv}
 
             # Build the project
-            dotnet publish -c Release -o ./publish
-
-            # Create a tarball of the publish directory
-            tar -czvf ${pname}-${version}.tar.gz -C ./publish .
-
-            # Set tarball as output
-            mv ${pname}-${version}.tar.gz $out
+            dotnet publish -c Release -o $out
           '';
 
           meta = with nixpkgs.lib; {
